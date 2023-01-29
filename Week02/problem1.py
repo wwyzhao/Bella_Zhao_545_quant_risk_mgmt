@@ -54,4 +54,4 @@ def unbiased_hypo_test():
 
 if __name__ == "__main__":
     
-    unbiased_hypo_test();
+    unbiased_hypo_test()
