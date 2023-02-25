@@ -91,10 +91,10 @@ def test_es():
     print("ES_T: ", ES_T)
 
 if __name__=='__main__':
-    # test_covariance()
-    # test_psd()
+    test_covariance()
+    test_psd()
     test_simulation()
-    # test_var()
-    # test_es()
+    test_var()
+    test_es()
     
     
