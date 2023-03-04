@@ -40,8 +40,8 @@ def get_VaR_ES_T(rt, alpha):
     mu = np.mean(rt)
     sigma = np.std(rt)
     df, loc, scale = st.t.fit(rt, loc=mu, scale=sigma)
-    fit_t = st.t.rvs(df = df, loc = loc, scale = scale, size = len(rt))
-    VaR = st.t.ppf(alpha, df=df, loc=mu, scale=sigma)
+    fit_t = st.t.rvs(df=df, loc=loc, scale=scale, size=len(rt))
+    VaR = st.t.ppf(alpha, df=df, loc=loc, scale=scale)
     temp = fit_t[fit_t <= VaR]
     ES = np.mean(temp)
     

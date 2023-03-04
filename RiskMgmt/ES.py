@@ -22,6 +22,13 @@ def get_VaR_ES(rt, alpha):
     temp = rt[rt <= VaR].dropna()
     ES = np.mean(temp)
     
+    plt.cla()
+    sns.histplot(rt, kde=True, color="blue", label="original data")
+    plt.axvline(VaR, color='r', label='VaR')
+    plt.axvline(ES, color='g', label='ES')
+    plt.title("VaR_ES")
+    plt.savefig("plots/problem3_VaR_ES.png")
+    
     return -VaR, -ES
     
 # absolute value of VaR for fitted normal distribution
@@ -81,5 +88,24 @@ def get_VaR_ES_T(rt, alpha):
     plt.axvline(ES, color='g', label='ES_T')
     plt.title("VaR_ES_T")
     plt.savefig("plots/problem3_VaR_ES_T.png")
+    
+    return -VaR, -ES
+
+def get_VaR_ES_historic(rt, alpha):
+
+    times = len(rt)
+    np.random.seed(1)
+    his_distribution = np.random.choice(rt, size=times, replace=True)
+    VaR = np.percentile(his_distribution, alpha * 100)
+    temp = his_distribution[his_distribution <= VaR]
+    ES = np.mean(temp)
+    
+    plt.cla()
+    sns.histplot(rt, kde=True, color="blue", label="original data")
+    sns.histplot(his_distribution, kde=True, color="orange", label="fitted_historical")
+    plt.axvline(VaR, color='r', label='VaR_Normal')
+    plt.axvline(ES, color='g', label='ES_Normal')
+    plt.title("VaR_ES_historical")
+    plt.savefig("plots/problem3_VaR_ES_historical.png")
     
     return -VaR, -ES

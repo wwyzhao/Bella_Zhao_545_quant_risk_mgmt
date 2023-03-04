@@ -61,6 +61,6 @@ if __name__ == '__main__':
     sum_port["total"] = sum_port["A"] + sum_port["B"] + sum_port["C"]
     
     for name, port in sum_port.iteritems():
-        VaR_his, ES_his = ES.get_VaR_ES_historic(port, alpha=0.05)
+        VaR_his, ES_his = ES.get_VaR_ES(port, alpha=0.05)
         print("Portfolio", name, "VaR: ", VaR_his, "ES: ", ES_his)
             
