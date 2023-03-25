@@ -19,15 +19,15 @@ def get_VaR_ES(rt, alpha):
     mu = np.mean(rt)
     sigma = np.std(rt)
     VaR = np.percentile(rt, alpha * 100)
-    temp = rt[rt <= VaR].dropna()
+    temp = rt[rt <= VaR]
     ES = np.mean(temp)
     
-    plt.cla()
-    sns.histplot(rt, kde=True, color="blue", label="original data")
-    plt.axvline(VaR, color='r', label='VaR')
-    plt.axvline(ES, color='g', label='ES')
-    plt.title("VaR_ES")
-    plt.savefig("plots/problem3_VaR_ES.png")
+    # plt.cla()
+    # sns.histplot(rt, kde=True, color="blue", label="original data")
+    # plt.axvline(VaR, color='r', label='VaR')
+    # plt.axvline(ES, color='g', label='ES')
+    # plt.title("VaR_ES")
+    # plt.savefig("plots/problem3_VaR_ES.png")
     
     return -VaR, -ES
     
