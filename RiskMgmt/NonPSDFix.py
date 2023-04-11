@@ -117,7 +117,7 @@ def get_psd(n):
     """
     sigma = np.zeros([n, n]) + 1
     for i in range(n):
-        sigma[i, i] = 2
+        sigma[i, i] = 0.9
     return sigma
 
 def is_PSD(a):

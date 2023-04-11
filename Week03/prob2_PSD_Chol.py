@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 
 # Cholesky that assumes PSD matrix
 def chol_psd(a):
-    m = a.shape[0]
-    root = np.zeros([m, m])
-    for j in range(m):
+    n = a.shape[0]
+    root = np.zeros([n, n])
+    for j in range(n):
         s = 0.0
         if j > 0:
-            s = root[j, :j-1].T @ root[j, :j-1]
+            s = root[j, :j].T @ root[j, :j]
 
         temp = a[j, j] - s
         if -1e-8 <= temp <= 0:
@@ -18,11 +18,11 @@ def chol_psd(a):
         root[j, j] = np.sqrt(temp)
 
         if abs(root[j, j]) <= 1e-6:
-            root[j, j+1:m] = 0.0
+            root[j, j+1:] = 0.0
         else:
             ir = 1 / (root[j, j]) # avoid denominator 0
-            for i in range(j+1, m):
-                s = root[i, :j-1].T @ root[j, :j-1]
+            for i in range(j+1, n):
+                s = root[i, :j].T @ root[j, :j]
                 root[i, j] = (a[i, j] - s) * ir
     return root
 
@@ -108,6 +108,26 @@ def get_nonpsd(n):
     sigma[1, 0] = 0.7357
     return sigma
 
+def get_psd(n):
+    sigma = np.zeros([n, n]) + 0.9
+    for i in range(n):
+        sigma[i, i] = 1.0
+    return sigma
+
+def is_PSD(a):
+    """Decide whether a covariance matrix is PSD, which cannot be used by Cholesky method
+
+    Args:
+        a (np.array): matrix
+
+    Returns:
+        bool: PSD return True; otherwise return False
+    """
+    if np.linalg.eigh(a)[0][0] >= -1e-8:
+        return True
+    else:
+        return False
+
 def compare_near_higham(n):
     sigma = get_nonpsd(n)
     s1 = time.time()
@@ -127,8 +147,8 @@ def compare_near_higham(n):
 
 if __name__ == '__main__':
 
-    sigma = get_nonpsd(5)
-
+    sigma = get_psd(5)
+    print(is_PSD(sigma))
     # cholesky algorithm test using a slightly non-psd correlation matrix that is 5x5
     print("Test Cholesky Algorithm using a slightly non-psd correlation matrix that is 5x5")
     print("This is the given matrix A")
@@ -144,6 +164,7 @@ if __name__ == '__main__':
     print(a)
     print()
 
+    sigma = get_nonpsd(5)
     # near psd test using a non-psd correlation matrix that is 5x5
     print("Test Near PSD Algorithm using a non-psd correlation matrix that is 5x5")
     print("This is the given matrix C")

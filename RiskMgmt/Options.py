@@ -37,7 +37,7 @@ class Option:
         d2 = (np.log(self.S0 / self.K) + (b - 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
         if self.type == 'call':
             value = self.S0 * np.exp((b - r) * T) * st.norm.cdf(d1, 0, 1) - self.K * np.exp(-r * T) * st.norm.cdf(d2, 0, 1)
-        elif self.type == 'put':
+        else:
             value = self.K * np.exp(-r * T) * st.norm.cdf(-d2, 0, 1) - self.S0 * np.exp((b - r) * T) * st.norm.cdf(-d1, 0, 1)
         return value
     

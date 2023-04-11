@@ -12,30 +12,26 @@ def chol_psd(a):
         np.array: Cholesky root
     """
     n = a.shape[0]
-    root = np.zeros((n,n))
-    
+    root = np.zeros([n, n])
     for j in range(n):
-        s = 0
+        s = 0.0
         if j > 0:
-            s = a[j, :j].T @ a[j, :j]
+            s = root[j, :j].T @ root[j, :j]
 
         temp = a[j, j] - s
-        if temp <= 0 and temp >= -1e-8:
-            temp = 0
-        root[j,j] = np.sqrt(temp)
-        
-        if root[j,j] == 0:
-            root[j,(j+1):] = 0
-        else:
-            ir = 1 / root[j,j]
-            for i in range(j+1, n):
+        if -1e-8 <= temp <= 0:
+            temp = 0.0
+        root[j, j] = np.sqrt(temp)
 
-                if j ==0:
-                    s = 0
-                else:
-                    s = a[i, :j].T @ a[j, :j]
-                root[i,j] = (a[i,j] - s) * ir
+        if abs(root[j, j]) <= 1e-6:
+            root[j, j+1:] = 0.0
+        else:
+            ir = 1 / (root[j, j]) # avoid denominator 0
+            for i in range(j+1, n):
+                s = root[i, :j].T @ root[j, :j]
+                root[i, j] = (a[i, j] - s) * ir
     return root
+
 
 def simulate_direct(cov, nsim):
     """Direct matrix simulation
@@ -50,7 +46,7 @@ def simulate_direct(cov, nsim):
     m = cov.shape[0]
     root = chol_psd(cov)
     z = np.random.normal(size=(m, nsim)) 
-    z = (root @ z).T
+    z = (root @ z)
     # z = np.random.multivariate_normal(np.zeros(m), cov, nsim).T
     return z
 

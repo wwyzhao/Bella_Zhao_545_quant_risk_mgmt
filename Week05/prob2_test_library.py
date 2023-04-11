@@ -48,9 +48,9 @@ def test_simulation():
     s_direct = Simulation.simulate_direct(cov_P, nsim)
     s_pca = Simulation.simulate_pca(np.array(cov_P), nsim, 0.75)
 
-    cov_direct = np.cov(s_direct.T)
+    cov_direct = np.cov(s_direct)
     diff_direct = norm(cov_direct - cov_P, 'fro')
-    cov_pca = np.cov(s_pca.T)
+    cov_pca = np.cov(s_pca)
     diff_pca = norm(cov_pca - cov_P, 'fro')
 
     print("norm of direct simulation: ", diff_direct)
