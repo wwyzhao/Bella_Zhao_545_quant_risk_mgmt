@@ -1,5 +1,7 @@
 # module of simulations
 import numpy as np
+import pandas as pd
+import scipy.stats as st
 
 # Cholesky Factorization for doing direct simulation
 def chol_psd(a):
@@ -85,3 +87,23 @@ def simulate_pca(cov, nsim, explain):
     s = B @ r
     
     return s
+
+def copula_t(rt, nsim = 1000):
+    #remove the mean
+    n = rt.shape[1]
+    rt = (rt - rt.mean()).astype(np.float64)
+
+    # calculate each T parameters, CDF for each column (Fit T Models to the returns)
+    paras = [st.t.fit(rt[col]) for col in rt.columns]
+    print("paras of fitted T distribution")
+    print(paras)
+    cdf = st.t.cdf(rt, *zip(*paras))
+    cdf = pd.DataFrame(data=cdf, index=rt.index, columns=rt.columns)
+    
+    # convert from multivariate normal to simulations of a T distribution (Gaussian Copula)
+    corr = cdf.corr(method = "spearman")
+    sim_t = pd.DataFrame(st.norm.cdf(simulate_pca(corr, nsim, 1)))
+    sim_df = [st.t.ppf(sim_t[col], *zip(*paras)) for col in sim_t.columns]
+    sim_df = pd.DataFrame(data=sim_df, columns=rt.columns)
+
+    return sim_df

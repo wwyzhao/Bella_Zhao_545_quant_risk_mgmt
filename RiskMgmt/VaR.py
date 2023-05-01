@@ -7,7 +7,7 @@ from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def return_calculate(data, method):
+def return_calculate(data, method="ARITH_RT"):
     """three methods of return
 
     Args:
