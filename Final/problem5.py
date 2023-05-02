@@ -55,7 +55,7 @@ if __name__ == '__main__':
     # Calculate VaR (5%) for each asset
     VaR_assets = []
     for i in range(4):
-        sim_r = np.array(sim_prices[i])
+        sim_r = np.array(sim_prices[i][1:]) - np.array(sim_prices[i][:-1])
         VaR_a, ES_a = ES.get_VaR_ES(sim_r, 0.05)
         VaR_assets.append(VaR_a)
     print("VaR (5%) for each asset")
@@ -68,9 +68,9 @@ if __name__ == '__main__':
         sim_prices1.append(sim_prices[0][i] + sim_prices[1][i])
         sim_prices2.append(sim_prices[2][i] + sim_prices[3][i])
     # portfolio of Asset 1 &2
-    sim_r_1 = np.array(sim_prices1)
+    sim_r_1 = np.array(sim_prices1[1:]) - np.array(sim_prices1[:-1])
     VaR_1_2, ES_1_2 = ES.get_VaR_ES(sim_r_1, 0.05)
-    sim_r_2 = np.array(sim_prices2)
+    sim_r_2 = np.array(sim_prices2[1:]) - np.array(sim_prices2[:-1])
     VaR_3_4, ES_3_4 = ES.get_VaR_ES(sim_r_2, 0.05)
     print("VaR (5%) for a portfolio of Asset 1 &2")
     print(VaR_1_2)
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     sim_prices_all = []
     for i in range(len(sim_prices[0])):
         sim_prices_all.append(sim_prices[0][i] + sim_prices[1][i] + sim_prices[2][i] + sim_prices[3][i])
-    sim_r_all = np.array(sim_prices_all)
+    sim_r_all = np.array(sim_prices_all[1:]) - np.array(sim_prices_all[:-1])
     VaR_all, ES_all = ES.get_VaR_ES(sim_r_all, 0.05)
     print("VaR (5%) for a portfolio of all 4 assets")
     print(VaR_all)
